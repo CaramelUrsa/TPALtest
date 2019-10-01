@@ -12,6 +12,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 serviceWorker.unregister();
 
 
+
 class GetArticle extends React.Component {
 
     handleClick = () => {
@@ -20,32 +21,62 @@ class GetArticle extends React.Component {
 
 
     state = {
-        title: 'loading...'
+        title: 'loading...',
+        text: 'loading...',
+        head: 'loading...',
     }
 
 
     componentDidMount() {
         fetch('https://en.wikipedia.org/w/api.php?action=query&format=json&list=random&rnlimit=1&rnnamespace=0&origin=*')
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result.query.random[0].title);
+                    this.setState({
+                        title: result.query.random[0].title
+                    });
+                    this.getHTMLhead()
+                    this.parseArticle()
+
+                }
+            )
+            .catch(console.log)
+    }
+
+    getHTMLhead() {
+        fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&page=' +this.state.title+ '&prop=headhtml&origin=*')
         .then(res => res.json())
         .then(
             (result) => {
-                console.log(result.query.random[0].title);
+                console.log(result.parse.headhtml['*']);
                 this.setState({
-                    title: result.query.random[0].title
+                    head: result.parse.headhtml['*']
                 });
             }
         )
-        .catch(console.log)
+    }
 
-       // fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&page=' + this.state.title)
+    parseArticle() {
+            fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&page=' + this.state.title + '&origin=*')
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log(result.parse.text['*']);
+                        this.setState({
+                            text: result.parse.text['*']
+                        });
+                    }
+                )
+                .catch(console.log)
     }
 
     //https://en.wikipedia.org/w/api.php?action=parse&format=json&page='title'
     render() {
         return (
-            <p>
-                {'https://en.wikipedia.org/w/api.php?action=parse&format=json&page=' + this.state.title}
-            </p>
+            <link rel="stylesheet" href="//en.wikipedia.org/w/load.php?modules=mediawiki.legacy.commonPrint,shared|mediawiki.skinning.elements|mediawiki.skinning.content|mediawiki.skinning.interface|skins.vector.styles|site|mediawiki.skinning.content.parsoid|ext.cite.style&amp;only=styles&amp;skin=vector"/>,
+            <head dangerouslySetInnerHTML={{__html: this.state.head}} />,
+            <body dangerouslySetInnerHTML={{__html: this.state.text}} />
         );
     }
 }
