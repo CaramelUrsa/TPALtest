@@ -24,6 +24,8 @@ class GetArticle extends React.Component {
         title: 'loading...',
         text: 'loading...',
         head: 'loading...',
+        interWikiLinks: [],
+        links: 'loading...',
     }
 
 
@@ -32,51 +34,70 @@ class GetArticle extends React.Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result.query.random[0].title);
+                    //console.log(result.query.random[0].title);
                     this.setState({
                         title: result.query.random[0].title
                     });
-                    this.getHTMLhead()
-                    this.parseArticle()
+                    //this.parseArticle()
+                    this.testParse()
 
                 }
             )
             .catch(console.log)
     }
 
-    getHTMLhead() {
-        fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&page=' +this.state.title+ '&prop=headhtml&origin=*')
+    parseArticle() {
+        fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text|headhtml&page=' + this.state.title + '&origin=*')
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result.parse.text['*']);
+                    this.setState({
+                        text: result.parse.text['*'],
+                        head: result.parse.headhtml['*']
+                    });
+                    this.cleanUp()
+                }
+            )
+            .catch(console.log)
+    }
+
+    testParse() {
+        fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text|headhtml&page=toast&origin=*')
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result.parse.title);
+                    //console.log(result.parse.text['*']);
+                    this.setState({
+                        text: result.parse.text['*'],
+                        head: result.parse.headhtml['*'],
+                        title: 'Toast'
+                    });
+                    this.cleanUp()
+                }
+            )
+            .catch(console.log)
+    }
+
+    cleanUp() {
+        fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=iwlinks|links&page=' + this.state.title + '&origin=*')
         .then(res => res.json())
         .then(
             (result) => {
-                console.log(result.parse.headhtml['*']);
-                this.setState({
-                    head: result.parse.headhtml['*']
-                });
+                console.log(result.parse.iwlinks);
+                this.interWikiLinks = result.parse.iwlinks
             }
         )
     }
 
-    parseArticle() {
-            fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&page=' + this.state.title + '&origin=*')
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        console.log(result.parse.text['*']);
-                        this.setState({
-                            text: result.parse.text['*']
-                        });
-                    }
-                )
-                .catch(console.log)
-    }
-
-    //https://en.wikipedia.org/w/api.php?action=parse&format=json&page='title'
     render() {
         return (
-            <link rel="stylesheet" href="//en.wikipedia.org/w/load.php?modules=mediawiki.legacy.commonPrint,shared|mediawiki.skinning.elements|mediawiki.skinning.content|mediawiki.skinning.interface|skins.vector.styles|site|mediawiki.skinning.content.parsoid|ext.cite.style&amp;only=styles&amp;skin=vector"/>,
-            <head dangerouslySetInnerHTML={{__html: this.state.head}} />,
-            <body dangerouslySetInnerHTML={{__html: this.state.text}} />
+            //<head dangerouslySetInnerHTML={{__html: this.state.head}} />,
+            //<div dangerouslySetInnerHTML={{__html: this.state.text}} />
+            //<head dangerouslySetInnerHTML={{__html: this.state.testhead}} />,
+            //<div dangerouslySetInnerHTML={{__html: this.state.test}} />
+            this.state.interWikiLinks
         );
     }
 }
