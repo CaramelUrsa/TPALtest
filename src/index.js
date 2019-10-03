@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { link } from 'fs';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -26,6 +27,7 @@ class GetArticle extends React.Component {
         head: 'loading...',
         interWikiLinks: [],
         links: 'loading...',
+        filteredItems: 'loading...',
     }
 
 
@@ -81,14 +83,10 @@ class GetArticle extends React.Component {
     }
 
     cleanUp() {
-        fetch('https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=iwlinks|links&page=' + this.state.title + '&origin=*')
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result.parse.iwlinks);
-                this.interWikiLinks = result.parse.iwlinks
-            }
-        )
+        var sampletext = "<p>words words</p> <a href=thisisalink.org>this is some text that used to be a link</a>"
+        var NewText = sampletext.replace('</a>', '')
+        NewText.replace(/<a\b[^>]*>/i,"")
+        console.log(NewText)
     }
 
     render() {
@@ -97,7 +95,8 @@ class GetArticle extends React.Component {
             //<div dangerouslySetInnerHTML={{__html: this.state.text}} />
             //<head dangerouslySetInnerHTML={{__html: this.state.testhead}} />,
             //<div dangerouslySetInnerHTML={{__html: this.state.test}} />
-            this.state.interWikiLinks
+
+            <p>test</p>
         );
     }
 }
