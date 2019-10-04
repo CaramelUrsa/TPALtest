@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { link } from 'fs';
+import { StickyContainer, Sticky } from 'react-sticky';
+//import { link } from 'fs';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -16,9 +17,11 @@ serviceWorker.unregister();
 
 class GetArticle extends React.Component {
 
+
     handleClick = () => {
         alert('test');
     }
+
 
 
     state = {
@@ -28,7 +31,9 @@ class GetArticle extends React.Component {
         interWikiLinks: [],
         links: 'loading...',
         filteredItems: 'loading...',
+        cleaned: 'loading...'
     }
+
 
 
     componentDidMount() {
@@ -40,8 +45,8 @@ class GetArticle extends React.Component {
                     this.setState({
                         title: result.query.random[0].title
                     });
-                    //this.parseArticle()
-                    this.testParse()
+                    this.parseArticle()
+                    //this.testParse()
 
                 }
             )
@@ -58,7 +63,6 @@ class GetArticle extends React.Component {
                         text: result.parse.text['*'],
                         head: result.parse.headhtml['*']
                     });
-                    this.cleanUp()
                 }
             )
             .catch(console.log)
@@ -76,32 +80,23 @@ class GetArticle extends React.Component {
                         head: result.parse.headhtml['*'],
                         title: 'Toast'
                     });
-                    this.cleanUp()
                 }
             )
             .catch(console.log)
     }
 
-    cleanUp() {
-        var sampletext = "<p>words words</p> <a href=thisisalink.org>this is some text that used to be a link</a>"
-        var NewText = sampletext.replace('</a>', '')
-        NewText.replace(/<a\b[^>]*>/i,"")
-        console.log(NewText)
-    }
 
     render() {
         return (
-            //<head dangerouslySetInnerHTML={{__html: this.state.head}} />,
-            //<div dangerouslySetInnerHTML={{__html: this.state.text}} />
-            //<head dangerouslySetInnerHTML={{__html: this.state.testhead}} />,
-            //<div dangerouslySetInnerHTML={{__html: this.state.test}} />
+            <StickyContainer>
+                
+                    <Sticky >{({ style }) => <div style={style} class='header'>Sticky element</div>}</Sticky>
 
-            <p>test</p>
+                <div dangerouslySetInnerHTML={{ __html: this.state.text.replace(/<\/a>/g, '').replace(/<a\b[^>]*>/g, "").replace(/\[.*?\]/) }} />
+            </StickyContainer>
         );
     }
 }
-
-
 
 ReactDOM.render(
     <GetArticle />,
