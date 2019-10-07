@@ -8,7 +8,47 @@ body {
 }
 
 .header {
+  padding: 5px;
   width: 100%;
-  border: 10px solid blue;
-  color: #00007F;
+  border: 5px solid #000000;
+  background-color: #7f7f7f;
+}
+
+.button {
+  padding: 10px;
+}
+
+.startbutton {
+  padding: 10px;
+  font-size: 400%;
+}
+
+.centered {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.joinbox {
+  padding: 10px;
+  height: 40%;
+  width: calc(100% - 30px);
+  border: 5px solid #000000;
+  position: absolute;
+  top: 100%;
+  transform: translate(0px,-100%);
+  text-align: center;
+}
+
+.gamecodebox {
+  border: 5px solid #000000;
+  padding: 5px;
+  text-align: center;
+}
+
+.playerlist {
+  width: 100%;
+  text-align: center;
+  
 }
