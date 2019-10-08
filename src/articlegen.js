@@ -4,7 +4,10 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { StickyContainer, Sticky } from 'react-sticky';
-//import { link } from 'fs';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import startscreen from './startscreen'
+import codescreen from './codescreen'
+import articlegen from './articlegen'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -105,7 +108,9 @@ class GetArticle extends React.Component {
     }
 }
 
-ReactDOM.render(
-    <GetArticle />,
-    document.getElementById('root')
-);
+export default GetArticle;
+
+//ReactDOM.render(
+//    <GetArticle />,
+//    document.getElementById('root')
+//);

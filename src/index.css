@@ -8,8 +8,7 @@ body {
 }
 
 .header {
-  padding: 5px;
-  width: 100%;
+  width: calc(100% - 10px);
   border: 5px solid #000000;
   background-color: #7f7f7f;
 }
@@ -32,7 +31,7 @@ body {
 
 .joinbox {
   padding: 10px;
-  height: 40%;
+  height: 20%;
   width: calc(100% - 30px);
   border: 5px solid #000000;
   position: absolute;
@@ -50,5 +49,15 @@ body {
 .playerlist {
   width: 100%;
   text-align: center;
-  
+  position: absolute;
+  top: calc(100% - 194px);
+  border: 5px #000000;
+}
+
+.backcolorone {
+  background-color: #f5f2d0;
+}
+
+.backcolortwo {
+  background-color: #fdfcec;
 }
