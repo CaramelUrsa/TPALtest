@@ -1,19 +1,17 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+//import ReactDOM from 'react-dom'
 import './index.css'
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
-import App from './App'
-import startscreen from './startscreen'
-import codescreen from './codescreen'
-import articlegen from './articlegen'
+//import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+//import App from './App'
+//import startscreen from './startscreen'
+//import codescreen from './codescreen'
+//import articlegen from './articlegen'
 
 const serverUrl = 'http://localhost:3000';
 
-class Requests extends React.Component {
-
-    async createGame() {
+export default class Request extends React.Component {
+        async createGame(username) {
         const url = serverUrl + '/room';
-        const username = startscreen.nameOfUser;
         const data = { player_name: username };
 
         try {
@@ -31,4 +29,6 @@ class Requests extends React.Component {
         }
     }
 }
-export default Request;
+
+
+//export default Request;

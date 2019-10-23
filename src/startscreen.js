@@ -6,11 +6,9 @@ import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 import startscreen from './startscreen'
 import codescreen from './codescreen'
 import articlegen from './articlegen'
-import requests from './request'
+//const SUrl = 'http://localhost:3000/room';
 
 ReactDOM.render(<App />, document.getElementById('root'));
-
-var nameOfUser = '';
 
 
 class StartScreen extends React.Component {
@@ -18,7 +16,7 @@ class StartScreen extends React.Component {
         return (
             <div>
                 <div className='centered' >
-                        <button className='startbutton' onClick={requests.createGame}>CREATE GAME</button>
+                        <button className='startbutton' onClick={this.createGame}>CREATE GAME</button>
                     <label>
                         User Name:
                         <input type='text' name='username' id='Username'/>
@@ -37,6 +35,19 @@ class StartScreen extends React.Component {
                 </div>
             </div>
         );
+    }
+
+    async createGame() {
+        var username = document.getElementById('Username').value;
+        const data = {"player_name":username};
+
+        fetch('http://localhost:3000/room?origin=*', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'},
+        })
+        .then(res => res.json())
+        .then(json => console.log(json))
     }
 }
 

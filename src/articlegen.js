@@ -4,10 +4,10 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { StickyContainer, Sticky } from 'react-sticky';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
-import startscreen from './startscreen'
-import codescreen from './codescreen'
-import articlegen from './articlegen'
+//import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+//import startscreen from './startscreen'
+//import codescreen from './codescreen'
+//import articlegen from './articlegen'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
