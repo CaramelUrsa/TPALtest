@@ -1,11 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-var express = require('express')
-var cors = require('cors')
 
-var app = express()
-app.use(cors())
 
 
 function App() {
