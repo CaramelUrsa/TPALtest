@@ -22,6 +22,7 @@ class LobbyScreen extends React.Component {
 
     componentDidMount() {
         this.player = ['inferno', 'snowbrawler', 'novaexplorer', 'bobfreedom'];
+        
         this.setState({
             code: Math.floor(Math.random() * 1000000)
         });
