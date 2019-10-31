@@ -10,6 +10,12 @@ import articlegen from './articlegen'
 ReactDOM.render(<App />, document.getElementById('root'));
 
 class LobbyScreen extends React.Component {
+    
+    gamecode = startscreen.gamecode;
+
+
+    
+
     state = {
         code: 'loading...',
     }
@@ -21,10 +27,12 @@ class LobbyScreen extends React.Component {
     playerlist = '';
 
     componentDidMount() {
+
+        console.log(this.gamecode);
         this.player = ['inferno', 'snowbrawler', 'novaexplorer', 'bobfreedom'];
         
         this.setState({
-            code: Math.floor(Math.random() * 1000000)
+            code: this.gamecode
         });
     }
 

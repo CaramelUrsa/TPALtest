@@ -19,18 +19,9 @@ import articlegen from './articlegen'
 ReactDOM.render(<App />, document.getElementById('root'));
 var playername = '';
 var gamecode = '';
-var states = {
-    redirect: true
-}
-
-states.setState({redirect: true});
 
 class StartScreen extends React.Component {
     render() {
-        if (this.state.redirect) {
-            return <Redirect push to='/codescreen' />
-        }
-        else {
         return (
                 <div>
                     <div className='centered' >
@@ -54,7 +45,6 @@ class StartScreen extends React.Component {
                 </div>
             );
         }
-    }
 
     async createGame() {
         var username = document.getElementById('Username').value;
@@ -67,7 +57,11 @@ class StartScreen extends React.Component {
             headers: {'Content-Type': 'application/json'},
         })
         .then(res => res.json())
-        .then(json => console.log(json));
+        .then(function name(json) {
+            gamecode = json.roomcode;   
+            console.log(gamecode)         
+        })
+        .then(window.location.assign("/codescreen"))
     }
 }
 
