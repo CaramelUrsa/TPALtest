@@ -24,6 +24,7 @@ class StartScreen extends React.Component {
     render() {
         return (
                 <div>
+                    <Link to="codescreen" params={{ code: "yeet" }}>Click Me!</Link>
                     <div className='centered' >
                             <button className='startbutton' onClick={this.createGame}>CREATE GAME</button>
                         <label>

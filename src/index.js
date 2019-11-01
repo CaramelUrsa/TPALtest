@@ -1,23 +1,22 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import './index.css'
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { render } from 'react-dom'
+import { Router, Route, Link } from 'react-router'
+//don't use "hashHistory" it no longer works
+//use "exact" instead of "IndexRoute"
 import App from './App'
 import startscreen from './startscreen'
 import codescreen from './codescreen'
 import articlegen from './articlegen'
 
-const routing = (
+render((
     <Router>
-        <div>
-            <Route exact path="/" component={App} />
-            <Route path="/startscreen" component={startscreen} />
-            <Route path="/codescreen" component={codescreen} />
-            <Route path="/articlegen" component={articlegen} />
-        </div>
+      <Route path="/" component={App}>
+        <Route exact component={startscreen} />
+        <Route path="about" component={codescreen} />
+        <Route path="inbox" component={articlegen} />
+      </Route>
     </Router>
-)
-
-ReactDOM.render(routing, document.getElementById('root'));
+  ), document.body)
 
 
