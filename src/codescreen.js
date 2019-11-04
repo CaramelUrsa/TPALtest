@@ -2,12 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Link, Switch, useParams, BrowserRouter as Router } from 'react-router-dom'
 import startscreen from './startscreen'
 import codescreen from './codescreen'
 import articlegen from './articlegen'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+function CodeScreen() {
+    let { code } = useParams()
+}
+
+ReactDOM.render(
+    <Router>
+        <div>
+            <Switch>
+                <Route path="/codescreen/:code">
+                    <CodeScreen />
+                </Route>
+            </Switch>
+        </div>
+    </Router>,
+    document.getElementById('root')
+);
 
 class LobbyScreen extends React.Component {
     
@@ -27,8 +42,6 @@ class LobbyScreen extends React.Component {
     playerlist = '';
 
     componentDidMount() {
-
-        console.log(this.gamecode);
         this.player = ['inferno', 'snowbrawler', 'novaexplorer', 'bobfreedom'];
         
         this.setState({
@@ -38,6 +51,7 @@ class LobbyScreen extends React.Component {
 
     render() {
         return (
+            <div>
             <div>
                 <div class='centered'>
                     <h1>GAME CODE:</h1>
@@ -61,6 +75,7 @@ class LobbyScreen extends React.Component {
                     <li class='backcolorone' >{this.player[8]}</li>
                 </ul>
                 </div>
+            </div>
             </div>
         );
     }

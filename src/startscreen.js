@@ -7,9 +7,7 @@ import {
     Switch,
     Route,
     Link,
-    Redirect,
-    useHistory,
-    useLocation
+    Redirect
   } from "react-router-dom";
 import startscreen from './startscreen'
 import codescreen from './codescreen'
@@ -17,10 +15,10 @@ import articlegen from './articlegen'
 //const SUrl = 'http://localhost:3000/room';
 
 ReactDOM.render(<App />, document.getElementById('root'));
-var playername = '';
 var gamecode = '';
 
 class StartScreen extends React.Component {
+    
     render() {
         return (
                 <div>
@@ -48,9 +46,8 @@ class StartScreen extends React.Component {
         }
 
     async createGame() {
-        var username = document.getElementById('Username').value;
-        playername = username;
-        const data = {"player_name":username};
+        var playername = document.getElementById('Username').value;
+        const data = {"player_name":playername};
 
         fetch('http://localhost:3000/room', {
             method: 'post',
@@ -62,7 +59,7 @@ class StartScreen extends React.Component {
             gamecode = json.roomcode;   
             console.log(gamecode)         
         })
-        .then(window.location.assign("/codescreen"))
+        .then(window.location.assign("/codescreen"));
     }
 }
 

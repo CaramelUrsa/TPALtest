@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.css'
 import { render } from 'react-dom'
-import { Router, Route, Link } from 'react-router'
+import { BrowserRouter, Router, Route, Link } from 'react-router-dom'
 //don't use "hashHistory" it no longer works
 //use "exact" instead of "IndexRoute"
 import App from './App'
@@ -10,13 +10,11 @@ import codescreen from './codescreen'
 import articlegen from './articlegen'
 
 render((
-    <Router>
-      <Route path="/" component={App}>
-        <Route exact component={startscreen} />
-        <Route path="about" component={codescreen} />
-        <Route path="inbox" component={articlegen} />
-      </Route>
-    </Router>
+    <BrowserRouter>
+      <Route path="/startscreen" component={startscreen} />
+      <Route path="/codescreen" component={codescreen} />
+      <Route path="/articlegen" component={articlegen} />
+    </BrowserRouter>
   ), document.body)
 
 
