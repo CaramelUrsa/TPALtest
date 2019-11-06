@@ -55,11 +55,8 @@ class StartScreen extends React.Component {
             headers: {'Content-Type': 'application/json'},
         })
         .then(res => res.json())
-        .then(function name(json) {
-            gamecode = json.roomcode;   
-            console.log(gamecode)         
-        })
-        .then(window.location.assign("/codescreen"));
+        .then(json => window.location.assign("/codescreen/" + json.roomcode ));
+        
     }
 }
 

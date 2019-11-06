@@ -7,47 +7,39 @@ import startscreen from './startscreen'
 import codescreen from './codescreen'
 import articlegen from './articlegen'
 
-function CodeScreen() {
-    let { code } = useParams()
-}
+//props.match.params.code
 
-ReactDOM.render(
-    <Router>
-        <div>
-            <Switch>
-                <Route path="/codescreen/:code">
-                    <CodeScreen />
-                </Route>
-            </Switch>
-        </div>
-    </Router>,
-    document.getElementById('root')
-);
+//['inferno', 'snowbrawler', 'novaexplorer', 'bobfreedom']
+
+
+//<Router>
+//<Route path="/codescreen/:code" component={LobbyScreen} />
+//</Router>
 
 class LobbyScreen extends React.Component {
-    
-    gamecode = startscreen.gamecode;
-
-
-    
-
-    state = {
-        code: 'loading...',
-    }
-
-    array = [];
-
-    player = [];
-
-    playerlist = '';
 
     componentDidMount() {
-        this.player = ['inferno', 'snowbrawler', 'novaexplorer', 'bobfreedom'];
-        
-        this.setState({
-            code: this.gamecode
-        });
+        this.createGame()
     }
+
+    constructor(props) {
+        super(props);
+        this.code = props.match.params.code
+        this.playerlist = ['inferno', 'snowbrawler', 'novaexplorer', 'bobfreedom'];
+    }
+
+    async createGame() {
+
+        fetch('http://localhost:3000/getPlayers', {
+            method: 'get',
+            headers: {'Content-Type': 'application/json'},
+        })
+        .then(res => res.json())
+        .then(json => console.log(json))
+        
+    }
+
+
 
     render() {
         return (
@@ -56,7 +48,7 @@ class LobbyScreen extends React.Component {
                 <div class='centered'>
                     <h1>GAME CODE:</h1>
                     <div class='gamecodebox'>
-                        <h1 dangerouslySetInnerHTML={{ __html: this.state.code }} />
+                        <h1>{this.code}</h1>
                     </div>
                     <Link to='/articlegen'>
                        <button class='startbutton'>START GAME</button>
@@ -64,15 +56,15 @@ class LobbyScreen extends React.Component {
                 </div>
                 <div class='playerlist'>
                 <ul>
-                    <li class='backcolorone' >{this.player[0]}</li>
-                    <li class='backcolortwo' >{this.player[1]}</li>
-                    <li class='backcolorone' >{this.player[2]}</li>
-                    <li class='backcolortwo' >{this.player[3]}</li>
-                    <li class='backcolorone' >{this.player[4]}</li>
-                    <li class='backcolortwo' >{this.player[5]}</li>
-                    <li class='backcolorone' >{this.player[6]}</li>
-                    <li class='backcolortwo' >{this.player[7]}</li>
-                    <li class='backcolorone' >{this.player[8]}</li>
+                    <li class='backcolorone' >{this.playerlist[0]}</li>
+                    <li class='backcolortwo' >{this.playerlist[1]}</li>
+                    <li class='backcolorone' >{this.playerlist[2]}</li>
+                    <li class='backcolortwo' >{this.playerlist[3]}</li>
+                    <li class='backcolorone' >{this.playerlist[4]}</li>
+                    <li class='backcolortwo' >{this.playerlist[5]}</li>
+                    <li class='backcolorone' >{this.playerlist[6]}</li>
+                    <li class='backcolortwo' >{this.playerlist[7]}</li>
+                    <li class='backcolorone' >{this.playerlist[8]}</li>
                 </ul>
                 </div>
             </div>
