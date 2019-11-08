@@ -6,7 +6,7 @@ import { Route, Link, Switch, useParams, BrowserRouter as Router } from 'react-r
 import startscreen from './startscreen'
 import codescreen from './codescreen'
 import articlegen from './articlegen'
-import { thisTypeAnnotation, thisExpression } from '@babel/types';
+import { thisTypeAnnotation, thisExpression, tsConstructorType, updateExpression } from '@babel/types';
 
 //props.match.params.code
 
@@ -27,21 +27,27 @@ class LobbyScreen extends React.Component {
         super(props);
         this.code = props.match.params.code;
         this.state = {
-            playerlist: ['oneFish','twoFish','redFish','blueFish']
-        }
-        this.change = this.change.bind(this)
+            playerlist: []
+        };
+
         this.temp = [];
         this.templength = 0;
-        this.bob = ['bob','otherbob','notbob','bobb'];
+        //console.log(this.state.playerlist);
+        this.createGame(this.state.playerlist);
+        //var intervalID = window.setInterval(readGames, 1000);
+        this.UpdatePlayerlist('yeet');
     }
 
-
-    async createGame() {
+    async createGame(test) {
+        if(test){
+            var Players = test
+            var intervalID = window.setInterval(readGames, 1000);
+        }
         const code = this.code;
-        var intervalID = window.setInterval(readGames, 1000);
+
+        var doUpdate = this.UpdatePlayerlist;
 
         function readGames() {
-            //console.log(this.playerlist);
             const data = { "wanted_code": code }
             fetch('http://localhost:3000/getPlayers', {
                 method: 'post',
@@ -56,14 +62,14 @@ class LobbyScreen extends React.Component {
             for (var i = 0; i < this.templength; i++) {
                 nameList.push(list[i].player_name);
             }
-            this.temp = nameList;
-            console.log(this.playerlist);
+            doUpdate(nameList);
         }
     }
 
-    change(ev) {
-        this.setState({playerlist: this.bob})
-    }
+    UpdatePlayerlist = (doot) => {
+        this.setState({ playerlist: doot });
+        console.log(doot);
+    };
 
     render() {
         return (
