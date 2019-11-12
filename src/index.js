@@ -12,7 +12,7 @@ import articlegen from './articlegen'
 render((
     <BrowserRouter>
       <Route path="/startscreen" component={startscreen} />
-      <Route path="/codescreen/:code" component={codescreen} />
+      <Route path="/codescreen/:code/:username" component={codescreen} />
       <Route path="/articlegen" component={articlegen} />
     </BrowserRouter>
   ), document.body)

@@ -22,22 +22,19 @@ class StartScreen extends React.Component {
     render() {
         return (
                 <div>
-                    <Link to="codescreen" params={{ code: "yeet" }}>Click Me!</Link>
                     <div className='centered' >
                             <button className='startbutton' onClick={this.createGame}>CREATE GAME</button>
                         <label>
-                            User Name:
+                            Username: 
                             <input type='text' name='username' id='Username'/>
                         </label>
                     </div>
                     <div className='joinbox'>
-                        <Link to='/codescreen'>
-                            <button className='startbutton' onClick={this.startGame}>JOIN GAME</button>
-                        </Link>
+                            <button className='startbutton' onClick={this.joinGame}>JOIN GAME</button>
                         <form>
                             <label>
                                 Game Code:
-                            <input type='text' name='gamecode'/>
+                            <input type='text' name='gamecode' id='Gamecode'/>
                             </label>
                         </form>
                     </div>
@@ -57,6 +54,21 @@ class StartScreen extends React.Component {
         .then(res => res.json())
         .then(json => window.location.assign("/codescreen/" + json.roomcode ));
         
+    }
+
+    async joinGame() {
+        var playername = document.getElementById('Username').value;
+        var gamecode = document.getElementById('Gamecode').value;
+        const data = {'game_code':gamecode,'player_name':playername};
+        var codedname = btoa(playername);
+
+        fetch('http://localhost:3000/player', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'},
+        })
+        .then(res => res.json())
+        .then(json => window.location.assign("/codescreen/" + json.leader_status + "/" + codedname));
     }
 }
 

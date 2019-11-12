@@ -27,27 +27,32 @@ class LobbyScreen extends React.Component {
         super(props);
         this.code = props.match.params.code;
         this.state = {
-            playerlist: []
+            playerlist: [],
+            leaderNumber: ''
         };
-
+        this.myName = atob(props.match.params.username)
         this.temp = [];
         this.templength = 0;
         //console.log(this.state.playerlist);
-        this.createGame(this.state.playerlist);
+        this.createGame(this.state.playerlist, this.myName);
         //var intervalID = window.setInterval(readGames, 1000);
         this.UpdatePlayerlist('yeet');
     }
 
-    async createGame(test) {
+    async createGame(test, myname) {
         if(test){
-            var Players = test
-            var intervalID = window.setInterval(readGames, 1000);
+            if(myname){
+                var Players = test;
+                var theName = myname;
+                var intervalID = window.setInterval(readGames, 500);
+            }
         }
         const code = this.code;
 
         var doUpdate = this.UpdatePlayerlist;
 
         function readGames() {
+            var leadernumber = '';
             const data = { "wanted_code": code }
             fetch('http://localhost:3000/getPlayers', {
                 method: 'post',
@@ -60,14 +65,23 @@ class LobbyScreen extends React.Component {
             var list = this.temp;
             var nameList = [];
             for (var i = 0; i < this.templength; i++) {
-                nameList.push(list[i].player_name);
+                if(list[i].player_name === theName){
+                } else {
+                    if(list[i].is_leader === 1){
+                        leadernumber = i
+                        nameList.push(list[i].player_name);
+                    } else {
+                        nameList.push(list[i].player_name);
+                    }
+                }
             }
-            doUpdate(nameList);
+            doUpdate(nameList, leadernumber);
         }
     }
 
-    UpdatePlayerlist = (doot) => {
+    UpdatePlayerlist = (doot, noot) => {
         this.setState({ playerlist: doot });
+        this.setState({ leaderNumber: noot })
         console.log(doot);
     };
 
@@ -77,6 +91,7 @@ class LobbyScreen extends React.Component {
                 <div>
                     <div class='centered'>
                         <h1>GAME CODE:</h1>
+                        <p>{this.myName}</p>
                         <div class='gamecodebox'>
                             <h1>{this.code}</h1>
                         </div>
@@ -85,10 +100,53 @@ class LobbyScreen extends React.Component {
                         </Link>
                     </div>
                     <div class='playerlist'>
+                        <p>{this.state.playerlist.length}/9</p>
                         <ul>
-                            {this.state.playerlist.map(item => (
-                                <li onChange={this.change} key={item}>{item}</li>
-                            ))}
+                            {this.state.leaderNumber === 0 ? (
+                                <li class='backcolorone'>{this.state.playerlist[0]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolorone'>{this.state.playerlist[0]}</li>
+                            )}
+                            {this.state.leaderNumber === 1 ? (
+                                <li class='backcolortwo'>{this.state.playerlist[1]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolortwo'>{this.state.playerlist[1]}</li>
+                            )}
+                            {this.state.leaderNumber === 2 ? (
+                                <li class='backcolorone'>{this.state.playerlist[2]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolorone'>{this.state.playerlist[2]}</li>
+                            )}
+                            {this.state.leaderNumber === 3 ? (
+                                <li class='backcolortwo'>{this.state.playerlist[3]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolortwo'>{this.state.playerlist[3]}</li>
+                            )}
+                            {this.state.leaderNumber === 4 ? (
+                                <li class='backcolorone'>{this.state.playerlist[4]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolorone'>{this.state.playerlist[4]}</li>
+                            )}
+                            {this.state.leaderNumber === 5 ? (
+                                <li class='backcolortwo'>{this.state.playerlist[5]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolortwo'>{this.state.playerlist[5]}</li>
+                            )}
+                            {this.state.leaderNumber === 6 ? (
+                                <li class='backcolorone'>{this.state.playerlist[6]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolorone'>{this.state.playerlist[6]}</li>
+                            )}
+                            {this.state.leaderNumber === 7 ? (
+                                <li class='backcolortwo'>{this.state.playerlist[7]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolortwo'>{this.state.playerlist[7]}</li>
+                            )}
+                            {this.state.leaderNumber === 8 ? (
+                                <li class='backcolorone'>{this.state.playerlist[8]} <font color="gold">&#9818;</font></li>
+                            ) : (
+                                <li class='backcolorone'>{this.state.playerlist[8]}</li>
+                            )}
                         </ul>
                     </div>
                 </div>
