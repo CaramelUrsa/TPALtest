@@ -68,7 +68,7 @@ class LobbyScreen extends React.Component {
                 if(list[i].player_name === theName){
                 } else {
                     if(list[i].is_leader === 1){
-                        leadernumber = i
+                        list[i].player_name = '♚ ' + list[i].player_name + ' ♚'
                         nameList.push(list[i].player_name);
                     } else {
                         nameList.push(list[i].player_name);
@@ -91,7 +91,7 @@ class LobbyScreen extends React.Component {
                 <div>
                     <div class='centered'>
                         <h1>GAME CODE:</h1>
-                        <p>{this.myName}</p>
+                        <p>「{this.myName}」</p>
                         <div class='gamecodebox'>
                             <h1>{this.code}</h1>
                         </div>
@@ -102,51 +102,15 @@ class LobbyScreen extends React.Component {
                     <div class='playerlist'>
                         <p>{this.state.playerlist.length}/9</p>
                         <ul>
-                            {this.state.leaderNumber === 0 ? (
-                                <li class='backcolorone'>{this.state.playerlist[0]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolorone'>{this.state.playerlist[0]}</li>
-                            )}
-                            {this.state.leaderNumber === 1 ? (
-                                <li class='backcolortwo'>{this.state.playerlist[1]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolortwo'>{this.state.playerlist[1]}</li>
-                            )}
-                            {this.state.leaderNumber === 2 ? (
-                                <li class='backcolorone'>{this.state.playerlist[2]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolorone'>{this.state.playerlist[2]}</li>
-                            )}
-                            {this.state.leaderNumber === 3 ? (
-                                <li class='backcolortwo'>{this.state.playerlist[3]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolortwo'>{this.state.playerlist[3]}</li>
-                            )}
-                            {this.state.leaderNumber === 4 ? (
-                                <li class='backcolorone'>{this.state.playerlist[4]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolorone'>{this.state.playerlist[4]}</li>
-                            )}
-                            {this.state.leaderNumber === 5 ? (
-                                <li class='backcolortwo'>{this.state.playerlist[5]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolortwo'>{this.state.playerlist[5]}</li>
-                            )}
-                            {this.state.leaderNumber === 6 ? (
-                                <li class='backcolorone'>{this.state.playerlist[6]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolorone'>{this.state.playerlist[6]}</li>
-                            )}
-                            {this.state.leaderNumber === 7 ? (
-                                <li class='backcolortwo'>{this.state.playerlist[7]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolortwo'>{this.state.playerlist[7]}</li>
-                            )}
-                            {this.state.leaderNumber === 8 ? (
-                                <li class='backcolorone'>{this.state.playerlist[8]} <font color="gold">&#9818;</font></li>
-                            ) : (
-                                <li class='backcolorone'>{this.state.playerlist[8]}</li>
-                            )}
+                            <li class='backcolorone' >{this.state.playerlist[0]}</li>
+                            <li class='backcolortwo' >{this.state.playerlist[1]}</li>
+                            <li class='backcolorone' >{this.state.playerlist[2]}</li>
+                            <li class='backcolortwo' >{this.state.playerlist[3]}</li>
+                            <li class='backcolorone' >{this.state.playerlist[4]}</li>
+                            <li class='backcolortwo' >{this.state.playerlist[5]}</li>
+                            <li class='backcolorone' >{this.state.playerlist[6]}</li>
+                            <li class='backcolortwo' >{this.state.playerlist[7]}</li>
+                            <li class='backcolorone' >{this.state.playerlist[8]}</li>
                         </ul>
                     </div>
                 </div>

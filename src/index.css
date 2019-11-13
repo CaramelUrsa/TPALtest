@@ -10,7 +10,7 @@ body {
 .header {
   width: calc(100% - 10px);
   border: 5px solid #000000;
-  background-color: #7f7f7f;
+  background-color: #FFFFFF;
 }
 
 .button {
@@ -51,7 +51,7 @@ body {
   width: 100%;
   text-align: center;
   position: absolute;
-  top: calc(100% - 194px);
+  top: calc(100% - 231px);
   border: 5px #000000;
 }
 
