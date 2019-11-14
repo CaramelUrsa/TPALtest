@@ -44,6 +44,7 @@ class StartScreen extends React.Component {
 
     async createGame() {
         var playername = document.getElementById('Username').value;
+        var codedname = btoa(playername);
         const data = {"player_name":playername};
 
         fetch('http://localhost:3000/room', {
@@ -52,16 +53,26 @@ class StartScreen extends React.Component {
             headers: {'Content-Type': 'application/json'},
         })
         .then(res => res.json())
-        .then(json => window.location.assign("/codescreen/" + json.roomcode ));
+        .then(json => window.location.assign("/codescreen/" + json.roomcode + "/" + codedname));
         
     }
 
     async joinGame() {
-        var playername = document.getElementById('Username').value;
-        var gamecode = document.getElementById('Gamecode').value;
-        const data = {'game_code':gamecode,'player_name':playername};
-        var codedname = btoa(playername);
+        var roomcode = document.getElementById('Gamecode').value;
+        const datar = {'room_code':roomcode}
+        fetch('http://localhost:3000/getPlayers', {
+            method: 'post',
+            body: JSON.stringify(datar),
+            headers: {'Content-Type': 'application/json'},
+        })
+        .then(res => res.json())
+        .then(json => console.log(json.length));
 
+
+        var playername = document.getElementById('Username').value;
+        const data = {'game_code':roomcode,'player_name':playername};
+        var codedname = btoa(playername);
+/*
         fetch('http://localhost:3000/player', {
             method: 'post',
             body: JSON.stringify(data),
@@ -69,6 +80,7 @@ class StartScreen extends React.Component {
         })
         .then(res => res.json())
         .then(json => window.location.assign("/codescreen/" + json.leader_status + "/" + codedname));
+        */
     }
 }
 

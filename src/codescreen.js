@@ -27,63 +27,43 @@ class LobbyScreen extends React.Component {
         super(props);
         this.code = props.match.params.code;
         this.state = {
-            playerlist: [],
-            leaderNumber: ''
+            PlayerList: ['MrPlaceholder','PlaceholderJoe','PlaceholderJR'],
         };
-        this.myName = atob(props.match.params.username)
-        this.temp = [];
-        this.templength = 0;
-        //console.log(this.state.playerlist);
-        this.createGame(this.state.playerlist, this.myName);
-        //var intervalID = window.setInterval(readGames, 1000);
-        this.UpdatePlayerlist('yeet');
+        this.myName = atob(props.match.params.username);
+        this.createGame(this.state.PlayerList, this.myName);
     }
 
-    async createGame(test, myname) {
-        if(test){
-            if(myname){
-                var Players = test;
-                var theName = myname;
-                var intervalID = window.setInterval(readGames, 500);
+    async createGame(playerlist, myname) {
+        if (playerlist) {
+            if (myname) {
+                var Players = playerlist;
+                var UserName = myname;
+                var intervalID = window.setInterval(readGames, 100);
             }
         }
         const code = this.code;
-
-        var doUpdate = this.UpdatePlayerlist;
+        var getplayers = this.GetPlayers;
 
         function readGames() {
             var leadernumber = '';
-            const data = { "wanted_code": code }
+            const data = { "room_code": code }
             fetch('http://localhost:3000/getPlayers', {
                 method: 'post',
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json' },
             })
                 .then(res => res.json())
-                .then(json => this.temp = json)
-                .then(json => this.templength = json.length)
-            var list = this.temp;
-            var nameList = [];
-            for (var i = 0; i < this.templength; i++) {
-                if(list[i].player_name === theName){
-                } else {
-                    if(list[i].is_leader === 1){
-                        list[i].player_name = '♚ ' + list[i].player_name + ' ♚'
-                        nameList.push(list[i].player_name);
-                    } else {
-                        nameList.push(list[i].player_name);
-                    }
-                }
-            }
-            doUpdate(nameList, leadernumber);
+                .then(json => getplayers(json));
         }
     }
 
-    UpdatePlayerlist = (doot, noot) => {
-        this.setState({ playerlist: doot });
-        this.setState({ leaderNumber: noot })
-        console.log(doot);
-    };
+    GetPlayers = (tosort) => {
+        var sorted = [];
+        for(var i = 0; i < tosort.length; i++){
+            sorted.push(tosort[i].player_name)
+        }
+        this.setState({ PlayerList: sorted })
+    }
 
     render() {
         return (
@@ -100,17 +80,17 @@ class LobbyScreen extends React.Component {
                         </Link>
                     </div>
                     <div class='playerlist'>
-                        <p>{this.state.playerlist.length}/9</p>
+                        <p>{this.state.PlayerList.length}/10</p>
                         <ul>
-                            <li class='backcolorone' >{this.state.playerlist[0]}</li>
-                            <li class='backcolortwo' >{this.state.playerlist[1]}</li>
-                            <li class='backcolorone' >{this.state.playerlist[2]}</li>
-                            <li class='backcolortwo' >{this.state.playerlist[3]}</li>
-                            <li class='backcolorone' >{this.state.playerlist[4]}</li>
-                            <li class='backcolortwo' >{this.state.playerlist[5]}</li>
-                            <li class='backcolorone' >{this.state.playerlist[6]}</li>
-                            <li class='backcolortwo' >{this.state.playerlist[7]}</li>
-                            <li class='backcolorone' >{this.state.playerlist[8]}</li>
+                            <li class='backcolorone' >{this.state.PlayerList[0]}</li>
+                            <li class='backcolortwo' >{this.state.PlayerList[1]}</li>
+                            <li class='backcolorone' >{this.state.PlayerList[2]}</li>
+                            <li class='backcolortwo' >{this.state.PlayerList[3]}</li>
+                            <li class='backcolorone' >{this.state.PlayerList[4]}</li>
+                            <li class='backcolortwo' >{this.state.PlayerList[5]}</li>
+                            <li class='backcolorone' >{this.state.PlayerList[6]}</li>
+                            <li class='backcolortwo' >{this.state.PlayerList[7]}</li>
+                            <li class='backcolorone' >{this.state.PlayerList[8]}</li>
                         </ul>
                     </div>
                 </div>
