@@ -7,6 +7,8 @@ import startscreen from './startscreen'
 import codescreen from './codescreen'
 import articlegen from './articlegen'
 import { thisTypeAnnotation, thisExpression, tsConstructorType, updateExpression } from '@babel/types';
+import { async } from 'q';
+import {doAthing} from './requests'
 
 //props.match.params.code
 
@@ -25,45 +27,55 @@ class LobbyScreen extends React.Component {
 
     constructor(props) {
         super(props);
+        this.proper = props;
         this.code = props.match.params.code;
         this.state = {
             PlayerList: ['MrPlaceholder','PlaceholderJoe','PlaceholderJR'],
+            Chaoslist: ['chaos','chaotic','more chaos','thats enough chaos'],
         };
         this.myName = atob(props.match.params.username);
-        this.createGame(this.state.PlayerList, this.myName);
+        this.createGame(this.proper)
     }
 
-    async createGame(playerlist, myname) {
-        if (playerlist) {
-            if (myname) {
-                var Players = playerlist;
-                var UserName = myname;
-                var intervalID = window.setInterval(readGames, 100);
+    async createGame(prop) {
+        var dude = this.setter;
+        var props = '';
+        if(prop){
+            props = prop
+            setInterval(function(){matcher(props, dude)}, 500);
+            function matcher(props, set) {
+                var list =[];
+                const data = {
+                    "room_code": props.match.params.code
+                }
+                var hehe = "4429";
+                console.log(doAthing(hehe))
+                //doAthing(hehe);
+                /*
+                fetch('http://localhost:3000/roomPlayers', {
+                    method: 'post',
+                    body: JSON.stringify(data),
+                    headers: {'Content-Type': 'application/json'},
+                })
+                .then(res => res.json())
+                .then(json => {
+                    for(var i=0;i<json.length;i++){
+                        list.push(json[i].player_name)
+                    }
+                    set(list);
+                });
+                */
             }
         }
-        const code = this.code;
-        var getplayers = this.GetPlayers;
-
-        function readGames() {
-            var leadernumber = '';
-            const data = { "room_code": code }
-            fetch('http://localhost:3000/getPlayers', {
-                method: 'post',
-                body: JSON.stringify(data),
-                headers: { 'Content-Type': 'application/json' },
-            })
-                .then(res => res.json())
-                .then(json => getplayers(json));
-        }
     }
 
-    GetPlayers = (tosort) => {
-        var sorted = [];
-        for(var i = 0; i < tosort.length; i++){
-            sorted.push(tosort[i].player_name)
-        }
-        this.setState({ PlayerList: sorted })
+    setter = (list) => {
+        this.setState({
+            PlayerList: list
+        })
     }
+
+
 
     render() {
         return (
