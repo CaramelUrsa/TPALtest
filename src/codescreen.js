@@ -8,7 +8,6 @@ import codescreen from './codescreen'
 import articlegen from './articlegen'
 import { thisTypeAnnotation, thisExpression, tsConstructorType, updateExpression } from '@babel/types';
 import { async } from 'q';
-import {doAthing} from './requests'
 
 //props.match.params.code
 
@@ -48,10 +47,6 @@ class LobbyScreen extends React.Component {
                 const data = {
                     "room_code": props.match.params.code
                 }
-                var hehe = "4429";
-                console.log(doAthing(hehe))
-                //doAthing(hehe);
-                /*
                 fetch('http://localhost:3000/roomPlayers', {
                     method: 'post',
                     body: JSON.stringify(data),
@@ -64,7 +59,6 @@ class LobbyScreen extends React.Component {
                     }
                     set(list);
                 });
-                */
             }
         }
     }
