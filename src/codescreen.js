@@ -29,8 +29,8 @@ class LobbyScreen extends React.Component {
         this.proper = props;
         this.code = props.match.params.code;
         this.state = {
-            PlayerList: ['MrPlaceholder','PlaceholderJoe','PlaceholderJR'],
-            Chaoslist: ['chaos','chaotic','more chaos','thats enough chaos'],
+            PlayerList: ['Loading...','Loading...','Loading...','Loading...','Loading...','Loading...','Loading...','Loading...','Loading...'],
+            Chaoslist: ['chaos', 'chaotic', 'more chaos', 'thats enough chaos'],
         };
         this.myName = atob(props.match.params.username);
         this.createGame(this.proper)
@@ -39,26 +39,29 @@ class LobbyScreen extends React.Component {
     async createGame(prop) {
         var dude = this.setter;
         var props = '';
-        if(prop){
+        if (prop) {
             props = prop
-            setInterval(function(){matcher(props, dude)}, 500);
+            setInterval(function () { matcher(props, dude) }, 500);
             function matcher(props, set) {
-                var list =[];
+                var list = [];
                 const data = {
                     "room_code": props.match.params.code
                 }
                 fetch('http://localhost:3000/roomPlayers', {
                     method: 'post',
                     body: JSON.stringify(data),
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                 })
-                .then(res => res.json())
-                .then(json => {
-                    for(var i=0;i<json.length;i++){
-                        list.push(json[i].player_name)
-                    }
-                    set(list);
-                });
+                    .then(res => res.json())
+                    .then(json => {
+                        for (var i = 0; i < json.length; i++) {
+                            if (json[i].player_name === atob(props.match.params.username)) {
+                            } else {
+                                list.push(json[i].player_name)
+                            }
+                        }
+                        set(list);
+                    });
             }
         }
     }
@@ -86,7 +89,7 @@ class LobbyScreen extends React.Component {
                         </Link>
                     </div>
                     <div class='playerlist'>
-                        <p>{this.state.PlayerList.length}/10</p>
+                        <p>{this.state.PlayerList.length + 1}/10</p>
                         <ul>
                             <li class='backcolorone' >{this.state.PlayerList[0]}</li>
                             <li class='backcolortwo' >{this.state.PlayerList[1]}</li>
