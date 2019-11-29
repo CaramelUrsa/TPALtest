@@ -52,30 +52,40 @@ class StartScreen extends React.Component {
         var roomcode = document.getElementById('Gamecode').value;
         var playername = document.getElementById('Username').value;
         const datar = { 'room_code': roomcode }
-        if (roomcode === '' || playername === '') {
-            if (roomcode === '') {
-                this.settercode('please enter a room code')
-            } else {
-                this.settercode()
-            };
-            if (playername === '') {
-                this.settername('please enter a username')
-            } else {
-                this.settername()
-            }
+        if (roomcode === '') {
+            this.settercode('please enter a room code')
         } else {
+            this.settercode('')
+        }
+        if (playername === '') {
+            this.settername('please enter a username')
+        } else {
+            this.settername()
+        }
+        if (playername !== '' && roomcode !== '') {
 
-            fetch('http://localhost:3000/roomPlayers', {
+            fetch('http://localhost:3000/grooms', {
+                method: 'post',
+                body: JSON.stringify(datar),
+                headers: { 'Content-Type': 'application/json'},
+            })
+            .then(res => res.json())
+            .then(json => {
+                var listorooms = [];
+                for(var i = 9; i < json.length; i++){
+                    listorooms.push(json[i].roomcode);
+                }
+                if (listorooms.indexOf(roomcode) > -1) {
+                    fetch('http://localhost:3000/roomPlayers', {
                 method: 'post',
                 body: JSON.stringify(datar),
                 headers: { 'Content-Type': 'application/json' },
             })
                 .then(res => res.json())
                 .then(json => {
-                    if (json.length > 9) {
+                    if (json.length >= 10) {
                         console.log("game " + roomcode + " is full")
                         this.settercode('Room ' + roomcode + ' is full');
-
                     } else {
                         var temp = [];
                         for (var i = 0; i < json.length; i++) {
@@ -98,6 +108,10 @@ class StartScreen extends React.Component {
                         }
                     }
                 });
+                } else {
+                    this.settercode("Room: "+ roomcode +" doesnt exist")
+                }
+            })
         }
     }
 

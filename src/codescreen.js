@@ -29,20 +29,25 @@ class LobbyScreen extends React.Component {
         this.proper = props;
         this.code = props.match.params.code;
         this.state = {
-            PlayerList: ['Loading...','Loading...','Loading...','Loading...','Loading...','Loading...','Loading...','Loading...','Loading...'],
+            PlayerList: ['Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...'],
             Chaoslist: ['chaos', 'chaotic', 'more chaos', 'thats enough chaos'],
+            IsLeader: 0,
         };
         this.myName = atob(props.match.params.username);
         this.createGame(this.proper)
+        this.DetectStart();
+        this.StartGame = this.StartGame.bind(this);
+        this.DetectStart = this.DetectStart.bind(this);
     }
 
     async createGame(prop) {
         var dude = this.setter;
+        var leadset = this.leadersetter
         var props = '';
         if (prop) {
             props = prop
-            setInterval(function () { matcher(props, dude) }, 500);
-            function matcher(props, set) {
+            setInterval(function () { matcher(props, dude, leadset) }, 500);
+            function matcher(props, set, leadset) {
                 var list = [];
                 const data = {
                     "room_code": props.match.params.code
@@ -56,6 +61,11 @@ class LobbyScreen extends React.Component {
                     .then(json => {
                         for (var i = 0; i < json.length; i++) {
                             if (json[i].player_name === atob(props.match.params.username)) {
+                                if (json[i].is_leader === 1) {
+                                    leadset(1);
+                                } else {
+                                    leadset(0);
+                                }
                             } else {
                                 list.push(json[i].player_name)
                             }
@@ -67,26 +77,67 @@ class LobbyScreen extends React.Component {
     }
 
     setter = (list) => {
+
         this.setState({
             PlayerList: list
         })
     }
 
+    leadersetter = (num) => {
 
+        this.setState({
+            IsLeader: num
+        })
+    }
+
+    async DetectStart() {
+        var code = this.code
+        setInterval(function () { detect(code) }, 500);
+        function detect(code) {
+            const data = {}
+        fetch('http://localhost:3000/grooms', {
+                    method: 'post',
+                    body: JSON.stringify(data),
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                .then(res => res.json())
+                .then(json => {
+                    for (var i = 0; i<json.length;i++){
+                        if(json[i].roomcode === code) {
+                            console.log(json[i].game_start)
+                        }
+                    }
+                })
+        }
+    }
+
+    async StartGame() {
+        console.log(this.code)
+        const data = {
+            "room_code":this.code,
+            "field":"1"
+        }
+        fetch('http://localhost:3000/gamestart', {
+                    method: 'post',
+                    body: JSON.stringify(data),
+                    headers: { 'Content-Type': 'application/json' },
+                })
+    }
 
     render() {
         return (
             <div>
                 <div>
                     <div class='centered'>
+                        <h1>{this.state.IsLeader}</h1>
                         <h1>GAME CODE:</h1>
                         <p>「{this.myName}」</p>
                         <div class='gamecodebox'>
                             <h1>{this.code}</h1>
                         </div>
-                        <Link to='/articlegen'>
-                            <button class='startbutton'>START GAME</button>
-                        </Link>
+                        {this.state.IsLeader > 0 &&
+                            <button onClick={this.StartGame} class='startbutton'>START GAME</button>
+                        }
                     </div>
                     <div class='playerlist'>
                         <p>{this.state.PlayerList.length + 1}/10</p>
