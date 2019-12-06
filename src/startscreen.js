@@ -96,15 +96,13 @@ class StartScreen extends React.Component {
                             this.settername("name " + playername + " is taken");
                         } else {
                             const data = { 'room_code': roomcode, 'player_name': playername };
-                            var codedname = btoa(playername);
-
                             fetch('http://localhost:3000/player', {
                                 method: 'post',
                                 body: JSON.stringify(data),
                                 headers: { 'Content-Type': 'application/json' },
                             })
                                 .then(res => res.json())
-                                .then(json => window.location.assign("/codescreen/" + json.room_code + "/" + codedname));
+                                .then(json => window.location.assign("/codescreen/" + json.room_code + "/" + json.idplayers));
                         }
                     }
                 });

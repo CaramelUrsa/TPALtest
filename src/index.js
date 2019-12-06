@@ -12,8 +12,8 @@ import articlegen from './articlegen'
 render((
     <BrowserRouter>
       <Route path="/startscreen" component={startscreen} />
-      <Route path="/codescreen/:code/:username" component={codescreen} />
-      <Route path="/articlegen" component={articlegen} />
+      <Route path="/codescreen/:code/:id" component={codescreen} />
+      <Route path="/articlegen/:code/:id" component={articlegen} />
     </BrowserRouter>
   ), document.body)
 

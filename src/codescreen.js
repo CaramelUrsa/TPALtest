@@ -33,7 +33,7 @@ class LobbyScreen extends React.Component {
             Chaoslist: ['chaos', 'chaotic', 'more chaos', 'thats enough chaos'],
             IsLeader: 0,
         };
-        this.myName = atob(props.match.params.username);
+        this.myCode = atob(props.match.params.id);
         this.createGame(this.proper)
         this.DetectStart();
         this.StartGame = this.StartGame.bind(this);
@@ -105,6 +105,9 @@ class LobbyScreen extends React.Component {
                     for (var i = 0; i<json.length;i++){
                         if(json[i].roomcode === code) {
                             console.log(json[i].game_start)
+                            if (json[i].game_start === 1) {
+                                window.location.assign("/articlegen")
+                            }
                         }
                     }
                 })
@@ -129,7 +132,6 @@ class LobbyScreen extends React.Component {
             <div>
                 <div>
                     <div class='centered'>
-                        <h1>{this.state.IsLeader}</h1>
                         <h1>GAME CODE:</h1>
                         <p>「{this.myName}」</p>
                         <div class='gamecodebox'>
