@@ -26,26 +26,45 @@ class StartScreen extends React.Component {
             errorname: ' ',
             errorcode: ' ',
         };
-        // 0 is no error
-        // 1 is missing entery
-        // 2 is taken/full
-        // 3 is invalid
         this.joinGame = this.joinGame.bind(this);
+        this.createGame = this.createGame.bind(this);
     }
 
     async createGame() {
         var playername = document.getElementById('Username').value;
-        var codedname = btoa(playername);
-        const data = { "player_name": playername };
+        if (playername === '') {
+            this.settername("Enter a valid name");
+        } else {
+            const data = { "player_name": playername };
 
-        fetch('http://localhost:3000/room', {
-            method: 'post',
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json' },
-        })
-            .then(res => res.json())
-            .then(json => window.location.assign("/codescreen/" + json.roomcode + "/" + codedname));
+            fetch('http://localhost:3000/room', {
+                method: 'post',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(res => res.json())
+                .then(json => {
+                    const datap = {
+                        "room_code": json.room_code
+                    }
+                    console.log(datap);
+                    fetch('http://localhost:3000/roomPlayers', {
+                        method: 'post',
+                        body: JSON.stringify(datap),
+                        headers: { 'Content-Type': 'application/json' },
+                    })
+                        .then(res => res.json())
+                        .then(json => {
+                            var leng = json.length
+                            for (var i = 0; i < leng; i++) {
+                                if (json[i].player_name === playername) {
+                                    window.location.assign("/codescreen/" + json[i].room_code + "/" + json[i].idplayers)
+                                }
+                            }
+                        })
+                })
 
+        }
     }
 
     async joinGame(func) {
@@ -53,12 +72,12 @@ class StartScreen extends React.Component {
         var playername = document.getElementById('Username').value;
         const datar = { 'room_code': roomcode }
         if (roomcode === '') {
-            this.settercode('please enter a room code')
+            this.settercode('Enter a valid room code')
         } else {
             this.settercode('')
         }
         if (playername === '') {
-            this.settername('please enter a username')
+            this.settername('Enter a valid name')
         } else {
             this.settername()
         }
@@ -67,49 +86,67 @@ class StartScreen extends React.Component {
             fetch('http://localhost:3000/grooms', {
                 method: 'post',
                 body: JSON.stringify(datar),
-                headers: { 'Content-Type': 'application/json'},
-            })
-            .then(res => res.json())
-            .then(json => {
-                var listorooms = [];
-                for(var i = 9; i < json.length; i++){
-                    listorooms.push(json[i].roomcode);
-                }
-                if (listorooms.indexOf(roomcode) > -1) {
-                    fetch('http://localhost:3000/roomPlayers', {
-                method: 'post',
-                body: JSON.stringify(datar),
                 headers: { 'Content-Type': 'application/json' },
             })
                 .then(res => res.json())
                 .then(json => {
-                    if (json.length >= 10) {
-                        console.log("game " + roomcode + " is full")
-                        this.settercode('Room ' + roomcode + ' is full');
-                    } else {
-                        var temp = [];
-                        for (var i = 0; i < json.length; i++) {
-                            temp.push(json[i].player_name);
-                        }
-                        if (temp.indexOf(playername) > 0) {
-                            console.log("name " + playername + " is taken");
-                            this.settername("name " + playername + " is taken");
-                        } else {
-                            const data = { 'room_code': roomcode, 'player_name': playername };
-                            fetch('http://localhost:3000/player', {
-                                method: 'post',
-                                body: JSON.stringify(data),
-                                headers: { 'Content-Type': 'application/json' },
-                            })
-                                .then(res => res.json())
-                                .then(json => window.location.assign("/codescreen/" + json.room_code + "/" + json.idplayers));
-                        }
+                    var listorooms = [];
+                    for (var i = 9; i < json.length; i++) {
+                        listorooms.push(json[i].roomcode);
                     }
-                });
-                } else {
-                    this.settercode("Room: "+ roomcode +" doesnt exist")
-                }
-            })
+                    if (listorooms.indexOf(roomcode) > -1) {
+                        fetch('http://localhost:3000/roomPlayers', {
+                            method: 'post',
+                            body: JSON.stringify(datar),
+                            headers: { 'Content-Type': 'application/json' },
+                        })
+                            .then(res => res.json())
+                            .then(json => {
+                                if (json.length >= 10) {
+                                    console.log("game " + roomcode + " is full")
+                                    this.settercode('Room ' + roomcode + ' is full');
+                                } else {
+                                    var temp = [];
+                                    for (var i = 0; i < json.length; i++) {
+                                        temp.push(json[i].player_name);
+                                    }
+                                    if (temp.indexOf(playername) > 0) {
+                                        console.log("name " + playername + " is taken");
+                                        this.settername("name " + playername + " is taken");
+                                    } else {
+                                        const data = { 'room_code': roomcode, 'player_name': playername };
+                                        fetch('http://localhost:3000/player', {
+                                            method: 'post',
+                                            body: JSON.stringify(data),
+                                            headers: { 'Content-Type': 'application/json' },
+                                        })
+                                            .then(res => res.json())
+                                            .then(json => {
+                                                const datar = {
+                                                    'room_code': json.room_code
+                                                }
+                                                fetch('http://localhost:3000/roomPlayers', {
+                                                    method: 'post',
+                                                    body: JSON.stringify(datar),
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                })
+                                                    .then(res => res.json())
+                                                    .then(json => {
+                                                        for (var i = 0; i < json.length; i++) {
+                                                            if (json[i].player_name === playername) {
+                                                                window.location.assign("/codescreen/" + json[i].room_code + "/" + json[i].idplayers)
+                                                            }
+                                                        }
+                                                    })
+                                            })
+                                        //.then(json => window.location.assign("/codescreen/" + json.room_code + "/" + json.idplayers));
+                                    }
+                                }
+                            });
+                    } else {
+                        this.settercode("Room: " + roomcode + " doesnt exist")
+                    }
+                })
         }
     }
 

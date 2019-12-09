@@ -45,7 +45,7 @@ class GetArticle extends React.Component {
 
     constructor(props) {
         super(props)
-        this.myName = atob(props.match.params.username);
+        this.myName = props.match.params.id;
         this.code = props.match.params.code;
         this.state = {
             title: 'loading...',

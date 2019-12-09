@@ -32,8 +32,9 @@ class LobbyScreen extends React.Component {
             PlayerList: ['Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...'],
             Chaoslist: ['chaos', 'chaotic', 'more chaos', 'thats enough chaos'],
             IsLeader: 0,
+            myName: 'Loading...'
         };
-        this.myCode = atob(props.match.params.id);
+        this.myCode = props.match.params.id;
         this.createGame(this.proper)
         this.DetectStart();
         this.StartGame = this.StartGame.bind(this);
@@ -43,11 +44,12 @@ class LobbyScreen extends React.Component {
     async createGame(prop) {
         var dude = this.setter;
         var leadset = this.leadersetter
+        var nameset = this.namesetter
         var props = '';
         if (prop) {
             props = prop
-            setInterval(function () { matcher(props, dude, leadset) }, 500);
-            function matcher(props, set, leadset) {
+            setInterval(function () { matcher(props, dude, leadset, nameset) }, 500);
+            function matcher(props, set, leadset, nameset) {
                 var list = [];
                 const data = {
                     "room_code": props.match.params.code
@@ -60,7 +62,8 @@ class LobbyScreen extends React.Component {
                     .then(res => res.json())
                     .then(json => {
                         for (var i = 0; i < json.length; i++) {
-                            if (json[i].player_name === atob(props.match.params.username)) {
+                            if ((json[i].idplayers).toString() === props.match.params.id) {
+                                nameset(json[i].player_name)
                                 if (json[i].is_leader === 1) {
                                     leadset(1);
                                 } else {
@@ -83,6 +86,13 @@ class LobbyScreen extends React.Component {
         })
     }
 
+    namesetter = (list) => {
+
+        this.setState({
+            myName: list
+        })
+    }
+
     leadersetter = (num) => {
 
         this.setState({
@@ -92,21 +102,22 @@ class LobbyScreen extends React.Component {
 
     async DetectStart() {
         var code = this.code
+        var id = this.myCode
         setInterval(function () { detect(code) }, 500);
         function detect(code) {
             const data = {}
-        fetch('http://localhost:3000/grooms', {
-                    method: 'post',
-                    body: JSON.stringify(data),
-                    headers: { 'Content-Type': 'application/json' },
-                })
+            fetch('http://localhost:3000/grooms', {
+                method: 'post',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' },
+            })
                 .then(res => res.json())
                 .then(json => {
-                    for (var i = 0; i<json.length;i++){
-                        if(json[i].roomcode === code) {
-                            console.log(json[i].game_start)
+                    console.log(code);
+                    for (var i = 0; i < json.length; i++) {
+                        if (json[i].roomcode === code) {
                             if (json[i].game_start === 1) {
-                                window.location.assign("/articlegen")
+                                window.location.assign("/articlegen/" + code + "/" + id)
                             }
                         }
                     }
@@ -117,14 +128,14 @@ class LobbyScreen extends React.Component {
     async StartGame() {
         console.log(this.code)
         const data = {
-            "room_code":this.code,
-            "field":"1"
+            "room_code": this.code,
+            "field": "1"
         }
         fetch('http://localhost:3000/gamestart', {
-                    method: 'post',
-                    body: JSON.stringify(data),
-                    headers: { 'Content-Type': 'application/json' },
-                })
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' },
+        })
     }
 
     render() {
@@ -133,7 +144,7 @@ class LobbyScreen extends React.Component {
                 <div>
                     <div class='centered'>
                         <h1>GAME CODE:</h1>
-                        <p>「{this.myName}」</p>
+                        <p>「{this.state.myName}」</p>
                         <div class='gamecodebox'>
                             <h1>{this.code}</h1>
                         </div>
