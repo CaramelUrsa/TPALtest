@@ -8,14 +8,27 @@ import codescreen from './codescreen'
 import articlegen from './articlegen'
 
 class Questioning extends React.Component {
-    articles = ['Toast','Squid','The war of the teapot','Mr. Blobby'];
 
+    constructor(props) {
+        super(props)
+        this.code = props.match.params.code;
+        this.myCode = props.match.params.id;
+        this.state = {
+            PlayerList: ['Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...', 'Loading...'],
+            message: 'Do you know what this is :'
+        };
     }
+
     randomArticle = '';
 
     render() {
-        return (
 
+        return (
+            <div>
+                <h1 class='centered'>{this.state.message}</h1>
+            </div>
         );
     }
 }
+
+export default Questioning;

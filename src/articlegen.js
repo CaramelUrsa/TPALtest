@@ -77,6 +77,19 @@ class GetArticle extends React.Component {
             time: this.state.time - 1,
             timer: this.secondsToClock(this.state.time - 1)
         })
+        if(this.state.time < 0) {
+            const data = {
+                'article_name': this.state.title,
+                'player_id': this.state.myName,
+                'room_code': this.state.code
+            }
+            fetch('http://localhost:3000/grooms', {
+                method: 'post',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then(window.location.assign("/questionscreen/" + this.state.code + "/" + this.state.myName))
+        }
     }
 
     secondsToClock(time) {
