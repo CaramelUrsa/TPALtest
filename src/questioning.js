@@ -15,8 +15,9 @@ class Questioning extends React.Component {
         this.myCode = props.match.params.id;
         this.state = {
             QuestionList: [],
-            message: 'Do you know what this is :',
+            message: 'Do you know what this is:',
             answered: [],
+            currentQ: 'Loading...',
         };
         this.scanArticles = this.scanArticles.bind(this);
         this.playerscan = this.playerscan.bind(this);
@@ -54,7 +55,14 @@ class Questioning extends React.Component {
                     }
                 }
             }
+            this.setState({
+                QuestionList: list,
+            })
         }
+        console.log(list[0].article_name)
+        this.setState({
+            currentQ: list[0].article_name,
+        })
     }
 
 
@@ -63,8 +71,11 @@ class Questioning extends React.Component {
     render() {
 
         return (
-            <div>
-                <h1 class='centered'>{this.state.message}</h1>
+            <div class='centered'>
+                <h1>{this.state.message}
+                <br/>
+                "{this.state.currentQ}"</h1>
+                <button className='startbutton' onClick={this.accept}>NO</button><button className='startbutton' onClick={this.decline}>YES</button>
             </div>
         );
     }
