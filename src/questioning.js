@@ -18,9 +18,11 @@ class Questioning extends React.Component {
             message: 'Do you know what this is:',
             answered: [],
             currentQ: 'Loading...',
+            current: 'Loading...',
         };
         this.scanArticles = this.scanArticles.bind(this);
         this.playerscan = this.playerscan.bind(this);
+        this.accept = this.accept.bind(this);
     }
 
     componentDidMount() {
@@ -41,17 +43,30 @@ class Questioning extends React.Component {
             .then(json => this.playerscan(json))
     }
 
+    accept() {
+        var acceptlist = this.state.current.aproval.split(",");
+        acceptlist.push(this.myCode)
+        const data = {
+            "field": this.state.current.idarticles,
+            "aprove": acceptlist.toString()
+        }
+        console.log(data);
+        fetch('http://localhost:3000/aprove', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' },
+        })
+    }
+
     playerscan(data) {
         var list = []
         for (var i = 0; i < data.length; i++) {
             if (data[i].player_id !== this.myCode) {
-                if (data[i].decline === "0") {
-                    if (!data.aproval) {
-                        list.push(data[i])
+                if (!data.aproval) {
+                    if (data[i].aproval.split(",").includes(this.myCode)) {
+
                     } else {
-                        if (data.aproval.indexOf(this.myCode) <= 0) {
-                            list.push(data[i])
-                        }
+                        list.push(data[i])
                     }
                 }
             }
@@ -59,10 +74,17 @@ class Questioning extends React.Component {
                 QuestionList: list,
             })
         }
-        console.log(list[0].article_name)
-        this.setState({
-            currentQ: list[0].article_name,
-        })
+        console.log(list)
+        if (list.length === 0) {
+            this.setState({
+                currentQ: "Please wait..."
+            })
+        } else {
+            this.setState({
+                currentQ: list[0].article_name,
+                current: list[0]
+            })
+        }
     }
 
 
@@ -73,8 +95,8 @@ class Questioning extends React.Component {
         return (
             <div class='centered'>
                 <h1>{this.state.message}
-                <br/>
-                "{this.state.currentQ}"</h1>
+                    <br />
+                    "{this.state.currentQ}"</h1>
                 <button className='startbutton' onClick={this.accept}>NO</button><button className='startbutton' onClick={this.decline}>YES</button>
             </div>
         );

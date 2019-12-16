@@ -5,10 +5,11 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { throwStatement } from '@babel/types';
-//import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
-//import startscreen from './startscreen'
-//import codescreen from './codescreen'
-//import articlegen from './articlegen'
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import startscreen from './startscreen'
+import codescreen from './codescreen'
+import articlegen from './articlegen'
+import questioning from './questioning'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -41,6 +42,11 @@ class GetArticle extends React.Component {
                     body: JSON.stringify(data),
                     headers: { 'Content-Type': 'application/json' },
                 })
+                .then(this.move())
+    }
+
+    move() {
+        window.location.assign("/questionscreen/" + this.code + "/" + this.myName)
     }
 
     constructor(props) {
@@ -60,6 +66,7 @@ class GetArticle extends React.Component {
         }
         this.handleTimer = this.handleTimer.bind(this);
         this.incrementTime = this.incrementTime.bind(this);
+        this.handleClick2 = this.handleClick2.bind(this);
         this.handleTimer()
         this.GenRandomArticle()
     }
