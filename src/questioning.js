@@ -23,6 +23,7 @@ class Questioning extends React.Component {
         this.scanArticles = this.scanArticles.bind(this);
         this.playerscan = this.playerscan.bind(this);
         this.accept = this.accept.bind(this);
+        this.decline = this.decline.bind(this);
     }
 
     componentDidMount() {
@@ -58,10 +59,27 @@ class Questioning extends React.Component {
         })
     }
 
+    decline() {
+        const data = {
+            "field": this.state.current.idarticles,
+            "decline": 1
+        }
+        fetch('http://localhost:3000/decline', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' },
+        })
+    }
+
     playerscan(data) {
         var list = []
         for (var i = 0; i < data.length; i++) {
-            if (data[i].player_id !== this.myCode) {
+            if (data[i].player_id === this.myCode) {
+                if (data[i].decline === '1') {
+                    window.location.assign("/articlegen/" + this.code + "/" + this.myCode)
+                }
+            } else {
+
                 if (!data.aproval) {
                     if (data[i].aproval.split(",").includes(this.myCode)) {
 
