@@ -37,12 +37,18 @@ class GetArticle extends React.Component {
             "player_id": this.myName,
             "room_code": this.code
         }
-        fetch('http://localhost:3000/article', {
-                    method: 'post',
-                    body: JSON.stringify(data),
-                    headers: { 'Content-Type': 'application/json' },
-                })
-                .then(this.move())
+        const datar = {
+            "room_code": this.code
+        }
+        fetch('http://localhost:3000/groomticle', {
+            method: 'post',
+            body: JSON.stringify(datar),
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(res => res.json())
+            .then(json => {
+
+            })
     }
 
     move() {
@@ -72,7 +78,7 @@ class GetArticle extends React.Component {
     }
 
     handleTimer() {
-         const incTime = this.incrementTime;
+        const incTime = this.incrementTime;
         setInterval(function () { doTimer(incTime) }, 1000);
         function doTimer(time) {
             time()
@@ -84,7 +90,7 @@ class GetArticle extends React.Component {
             time: this.state.time - 1,
             timer: this.secondsToClock(this.state.time - 1)
         })
-        if(this.state.time < 0) {
+        if (this.state.time < 0) {
             const data = {
                 'article_name': this.state.title,
                 'player_id': this.state.myName,
@@ -95,17 +101,17 @@ class GetArticle extends React.Component {
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json' },
             })
-            .then(window.location.assign("/questionscreen/" + this.state.code + "/" + this.state.myName))
+                .then(window.location.assign("/questionscreen/" + this.state.code + "/" + this.state.myName))
         }
     }
 
     secondsToClock(time) {
         var mins = Math.floor(time / 60);
         var secs = time - (mins * 60)
-        if(secs.toString().length < 2){
+        if (secs.toString().length < 2) {
             secs = "0" + secs.toString()
         }
-        return(mins + ":" + secs);
+        return (mins + ":" + secs);
     }
 
     GenRandomArticle() {

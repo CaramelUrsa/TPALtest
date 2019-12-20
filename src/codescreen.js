@@ -8,6 +8,7 @@ import codescreen from './codescreen'
 import articlegen from './articlegen'
 import { thisTypeAnnotation, thisExpression, tsConstructorType, updateExpression } from '@babel/types';
 import { async } from 'q';
+import {jeff, request} from './request'
 
 //props.match.params.code
 
@@ -77,6 +78,13 @@ class LobbyScreen extends React.Component {
                     });
             }
         }
+    }
+
+    async doThing() {
+        const data = {}
+        var res = await(request("grooms", data))
+        res = await res.json();
+        console.log(res)
     }
 
     setter = (list) => {
@@ -149,7 +157,8 @@ class LobbyScreen extends React.Component {
                             <h1>{this.code}</h1>
                         </div>
                         {this.state.IsLeader > 0 &&
-                            <button onClick={this.StartGame} class='startbutton'>START GAME</button>
+                            //<button onClick={this.StartGame} class='startbutton'>START GAME</button>
+                            <button onClick={this.doThing} class='startbutton'>TEST</button>
                         }
                     </div>
                     <div class='playerlist'>
